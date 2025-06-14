@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="StarWarsFilterApp.View.StartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StarWarsFilterApp.View" xmlns:viewmodel="clr-namespace:StarWarsFilterApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:StartViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <StackPanel>
+            <Label Content="Hello! Decide what do you want to know!"/>
+
+            <Button x:Name="btn_characters" Content="Characters" 
+                Background="DarkOrange" Foreground="White"
+                Margin="200 5" Command="{Binding ShowCharactersCommand}"/>
+            <Button x:Name="btn_films" Content="Films" 
+                Background="Purple" Foreground="White"
+                Margin="200 5" Command="{Binding ShowFilmsCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
