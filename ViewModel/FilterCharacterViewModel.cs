@@ -2,6 +2,7 @@
 using StarWarsFilterApp.Services;
 using StarWarsFilterApp.View;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows.Input;
 
 namespace StarWarsFilterApp.ViewModel
@@ -30,7 +31,8 @@ namespace StarWarsFilterApp.ViewModel
             _main = main;
             ReturnCommand = new RelayCommand(ReturnToStart);
             ClearTextFieldsCommand = new RelayCommand(ClearTextFields);
-            FilterCommand = new RelayCommand(obj => FilterCharacters(Name, Species, Planet, Organization, Film));
+            FilterCommand = new RelayCommand(obj => FilterCharacters(Name, Species, Planet, Organization, Film, Height, Gender));
+
 
             // Inicjalizacja kolekcji postaci
             _characterService = new CharacterService();
@@ -38,13 +40,15 @@ namespace StarWarsFilterApp.ViewModel
             LoadCharacters();
         }
 
-        public List<Character> FilterCharacters(string name, string species, string planet, string organization, string film)
+        public List<Character> FilterCharacters(string name, string species, string planet, string organization, string film, string height, string gender)
         {
             _name = name;
             _species = species;
             _planet = planet;
             _organization = organization;
             _film = film;
+            _height = height;
+            _gender = gender;
 
             IEnumerable<Character> result;
 
@@ -56,7 +60,7 @@ namespace StarWarsFilterApp.ViewModel
             }
             else
             {
-                result = _characterService.GetAllCharacters();
+                result = _characterService.GetFilteredCharacters(_gender, _height);
             }
 
             Characters = new ObservableCollection<Character>(result);
@@ -64,6 +68,7 @@ namespace StarWarsFilterApp.ViewModel
 
             return Characters.ToList();
         }
+
 
         private void ReturnToStart(object? obj)
         {
@@ -121,6 +126,19 @@ namespace StarWarsFilterApp.ViewModel
         {
             get => _film;
             set => SetProperty(ref _film, value);
+        }
+        private string _height;
+        public string Height
+        {
+            get => _height;
+            set => SetProperty(ref _height, value);
+        }
+
+        private string _gender;
+        public  string Gender
+        {
+            get => _gender;
+            set => SetProperty(ref _gender, value);
         }
     }
 }

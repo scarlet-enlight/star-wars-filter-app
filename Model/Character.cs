@@ -12,7 +12,7 @@ namespace StarWarsFilterApp.Model
         public string Name { get; set; }
         public string Species { get; set; }
         public bool IsFavorite { get; set; }
-        public enum GenderType { Female, Male, None }
+        public enum GenderType { None, Male, Female}
         public GenderType Gender { get; set; }
         public float Height { get; set; }
         public float Weight { get; set; }

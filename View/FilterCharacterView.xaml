@@ -33,6 +33,14 @@
             <TextBox Text="{Binding Film, UpdateSourceTrigger=PropertyChanged}" 
                      ToolTip="e.g. A New Hope" />
 
+            <Label Content="Gender:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" 
+                 />
+
+            <Label Content="Height:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" 
+                 />
+
             <Button Content="Filter"
                     Background="#1B263B" Foreground="#E0E1DD"
                     Margin="10 5" Padding="8"
@@ -53,7 +61,7 @@
                 <DataTemplate>
                     <StackPanel Margin="5">
                         <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                        <TextBlock Text="{Binding Species}" />
+                        <TextBlock Text="{Binding Height}" />
                         <TextBlock Text="{Binding Gender}" />
                     </StackPanel>
                 </DataTemplate>
