@@ -37,7 +37,7 @@
                     Background="#1B263B" Foreground="#E0E1DD"
                     Margin="10 5" Padding="8"
                     BorderBrush="#415A77" BorderThickness="1"
-                    Command="{Binding ClearTextFieldsCommand}" />
+                    Command="{Binding FilterCommand}" />
 
             <Button Content="Back"
                     Background="DarkGray" Foreground="White"
