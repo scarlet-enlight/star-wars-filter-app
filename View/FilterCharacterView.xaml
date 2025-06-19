@@ -6,35 +6,58 @@
              xmlns:local="clr-namespace:StarWarsFilterApp.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="#0D1B2A">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
-            <Label Content="Name:"/>
-            <TextBox x:Name="tbx_name"/>
 
-            <Label Content="Species:"/>
-            <TextBox x:Name="tbx_species"/>
+        <StackPanel Grid.Column="0" Margin="20">
+            <Label Content="Name:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                     ToolTip="e.g. Luke Skywalker" />
 
-            <Label Content="Planet:"/>
-            <TextBox x:Name="tbx_planet"/>
+            <Label Content="Species:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Species, UpdateSourceTrigger=PropertyChanged}" 
+                     ToolTip="e.g. Human" />
 
-            <Label Content="Organization:"/>
-            <TextBox x:Name="tbx_organization"/>
+            <Label Content="Planet:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Planet, UpdateSourceTrigger=PropertyChanged}" 
+                     ToolTip="e.g. Tatooine" />
 
-            <Label Content="Film:"/>
-            <TextBox x:Name="tbx_film"/>
+            <Label Content="Organization:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Organization, UpdateSourceTrigger=PropertyChanged}" 
+                     ToolTip="e.g. Jedi Order" />
 
-            <Button x:Name="btn_filter" Content="Filter" 
-                Background="DarkBlue" Foreground="White"
-                Margin="20 5" Command="{Binding FilterCharactersCommand}"/>
-            <Button x:Name="btn_startView" Content="Back" 
-                Background="DarkGray" Foreground="White"
-                Margin="20 5" Command="{Binding ReturnCommand}"/>
+            <Label Content="Film:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Film, UpdateSourceTrigger=PropertyChanged}" 
+                     ToolTip="e.g. A New Hope" />
+
+            <Button Content="Filter"
+                    Background="#1B263B" Foreground="#E0E1DD"
+                    Margin="10 5" Padding="8"
+                    BorderBrush="#415A77" BorderThickness="1"
+                    Command="{Binding ClearTextFieldsCommand}" />
+
+            <Button Content="Back"
+                    Background="DarkGray" Foreground="White"
+                    Margin="10 5" Padding="8"
+                    Command="{Binding ReturnCommand}" />
         </StackPanel>
-        <ListBox Grid.Column="1" x:Name="lb_characters"
-         SelectionChanged="Lb_characters_SelectionChanged"/>
+
+        <ListBox Grid.Column="1"
+                 Background="#1B263B" Foreground="#E0E1DD"
+                 BorderThickness="0" Margin="20"
+                 ItemsSource="{Binding FilteredCharacters}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Species}" />
+                        <TextBlock Text="{Binding Gender}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

@@ -1,5 +1,6 @@
 ﻿using StarWarsFilterApp.View;
 using System;
+using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace StarWarsFilterApp.ViewModel
 
         public ICommand ShowCharactersCommand { get; }
         public ICommand ShowFilmsCommand { get; }
+        public ICommand ExitCommand { get; }
 
         public StartViewModel(MainWindowViewModel main)
         {
@@ -21,6 +23,7 @@ namespace StarWarsFilterApp.ViewModel
 
             ShowCharactersCommand = new RelayCommand(ShowCharacters);
             ShowFilmsCommand = new RelayCommand(ShowFilms);
+            ExitCommand = new RelayCommand(Exit);
         }
 
         private void ShowCharacters(object? obj)
@@ -32,6 +35,11 @@ namespace StarWarsFilterApp.ViewModel
         {
             _main.CurrentView = new FilterFilmView(_main);
         }
+        private void Exit(object? obj)
+        {
+            Application.Current.Shutdown();
+        }
+
     }
 
 }
