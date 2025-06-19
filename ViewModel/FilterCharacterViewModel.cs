@@ -15,6 +15,8 @@ namespace StarWarsFilterApp.ViewModel
         public ICommand ReturnCommand { get; }
         public ICommand ClearTextFieldsCommand { get; }
 
+        public ICommand FilterCommand { get; }
+
         // Serwis do pobierania postaci
         private readonly CharacterService _characterService;
 
@@ -28,10 +30,39 @@ namespace StarWarsFilterApp.ViewModel
             _main = main;
             ReturnCommand = new RelayCommand(ReturnToStart);
             ClearTextFieldsCommand = new RelayCommand(ClearTextFields);
+            FilterCommand = new RelayCommand(obj => FilterCharacters(Name, Species, Planet, Organization, Film));
 
             // Inicjalizacja kolekcji postaci
             _characterService = new CharacterService();
+
             LoadCharacters();
+        }
+
+        public List<Character> FilterCharacters(string name, string species, string planet, string organization, string film)
+        {
+            _name = name;
+            _species = species;
+            _planet = planet;
+            _organization = organization;
+            _film = film;
+
+            IEnumerable<Character> result;
+
+            if (_name != null)
+            {
+
+                result = new List<Character> { _characterService.GetCharacterByName(_name) };
+
+            }
+            else
+            {
+                result = _characterService.GetAllCharacters();
+            }
+
+            Characters = new ObservableCollection<Character>(result);
+            OnPropertyChanged(nameof(Characters));
+
+            return Characters.ToList();
         }
 
         private void ReturnToStart(object? obj)
@@ -49,11 +80,12 @@ namespace StarWarsFilterApp.ViewModel
         }
         private void LoadCharacters()
         {
-            // Pobranie wszystkich postaci z serwisu i przypisanie do kolekcji
+
             var result = _characterService.GetAllCharacters();
             Characters = new ObservableCollection<Character>(result);
             OnPropertyChanged(nameof(Characters));
         }
+
 
         // Powiązane właściwości
         private string _name;

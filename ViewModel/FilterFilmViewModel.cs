@@ -1,5 +1,8 @@
 ﻿using StarWarsFilterApp.View;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using StarWarsFilterApp.Model;
+using StarWarsFilterApp.Services;
 
 namespace StarWarsFilterApp.ViewModel
 {
@@ -10,11 +13,26 @@ namespace StarWarsFilterApp.ViewModel
 
         private readonly MainWindowViewModel _main;
 
+        public ObservableCollection<Film> Films { get; set; }
+
+        private readonly FilmService _filmService;
+
         public FilterFilmViewModel(MainWindowViewModel main)
         {
             _main = main;
             ReturnCommand = new RelayCommand(ReturnToStart);
             ClearTextFieldsCommand = new RelayCommand(ClearTextFields);
+
+            _filmService = new FilmService();
+            LoadFilms();
+        }
+
+        private void LoadFilms()
+        {
+            // Pobranie wszystkich postaci z serwisu i przypisanie do kolekcji
+            var result = _filmService.GetAllFilms();
+            Films = new ObservableCollection<Film>(result);
+            OnPropertyChanged(nameof(Films));
         }
 
         private void ReturnToStart(object? obj)
