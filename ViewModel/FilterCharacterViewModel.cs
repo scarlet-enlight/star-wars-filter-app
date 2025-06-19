@@ -1,20 +1,37 @@
-﻿using StarWarsFilterApp.View;
+﻿using StarWarsFilterApp.Model;
+using StarWarsFilterApp.Services;
+using StarWarsFilterApp.View;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace StarWarsFilterApp.ViewModel
 {
     public class FilterCharacterViewModel : BaseViewModel
     {
+        // Referencja do głównego widoku
         private readonly MainWindowViewModel _main;
 
+        // Komendy do nawigacji
         public ICommand ReturnCommand { get; }
         public ICommand ClearTextFieldsCommand { get; }
+
+        // Serwis do pobierania postaci
+        private readonly CharacterService _characterService;
+
+        // Kolekcja postaci
+        public ObservableCollection<Character> Characters { get; set; }
+
+
 
         public FilterCharacterViewModel(MainWindowViewModel main)
         {
             _main = main;
             ReturnCommand = new RelayCommand(ReturnToStart);
             ClearTextFieldsCommand = new RelayCommand(ClearTextFields);
+
+            // Inicjalizacja kolekcji postaci
+            _characterService = new CharacterService();
+            LoadCharacters();
         }
 
         private void ReturnToStart(object? obj)
@@ -29,6 +46,13 @@ namespace StarWarsFilterApp.ViewModel
             Planet = string.Empty;
             Organization = string.Empty;
             Film = string.Empty;
+        }
+        private void LoadCharacters()
+        {
+            // Pobranie wszystkich postaci z serwisu i przypisanie do kolekcji
+            var result = _characterService.GetAllCharacters();
+            Characters = new ObservableCollection<Character>(result);
+            OnPropertyChanged(nameof(Characters));
         }
 
         // Powiązane właściwości
