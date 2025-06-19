@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 using MySql.Data.MySqlClient;
+using System.Xml.Linq;
+using System.Reflection;
+using System.Windows.Media.Media3D;
+using System.Globalization;
 
 namespace StarWarsFilterApp.Services
 {
@@ -47,7 +51,7 @@ namespace StarWarsFilterApp.Services
             var characters = new List<Character>();
             using (var conn = _connectionService.GetConnection())
             {
-                string query = "SELECT id, name FROM characters";
+                string query = "SELECT name, gender, height  FROM characters";
                 using (var cmd = new MySqlCommand(query, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -55,8 +59,11 @@ namespace StarWarsFilterApp.Services
                     {
                         characters.Add(new Character
                         {
-                            Id = reader.GetInt32("id"),
                             Name = reader.GetString("name"),
+                            Gender = Enum.TryParse<Character.GenderType>(
+                                 reader.GetString("gender"),
+                                 out var gender) ? gender : Character.GenderType.None,
+                            Height = reader.GetFloat("height")
                         });
                     }
                 }
@@ -89,6 +96,42 @@ namespace StarWarsFilterApp.Services
                 }
             }
             return characters;
+        }
+
+        public List<Character> GetFilteredCharacters(string gender, string Height)
+        {
+            float height = 0f;
+            if (!string.IsNullOrWhiteSpace(Height))
+            {
+                float.TryParse(Height, NumberStyles.Any, CultureInfo.CurrentCulture, out height);
+            }
+
+            var characters = new List<Character>();
+            using (var conn = _connectionService.GetConnection())
+            {
+
+                string query = "SELECT name, gender, height FROM characters WHERE gender=@gender OR (height BETWEEN @height - 0.01 AND @height + 0.01)";
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@gender", gender);
+                    cmd.Parameters.AddWithValue("@height", height);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            characters.Add(new Character
+                            {
+                                Gender = Enum.TryParse<Character.GenderType>(reader.GetString("gender"), out var parsedGender)
+                            ? parsedGender
+                            : Character.GenderType.None,
+                                Height = reader.GetFloat("height")
+
+                            });
+                        }
+                    }
+                }
+                return characters;
+            }
         }
     }
 }
