@@ -18,6 +18,30 @@ namespace StarWarsFilterApp.Services
             _connectionService = new MySQLConnectionService();
         }
 
+
+        public Character GetCharacterByName(string name)
+        {
+            using (var conn = _connectionService.GetConnection())
+            {
+                string query = "SELECT id, name FROM characters WHERE name = @name";
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Character
+                            {
+                                Id = reader.GetInt32("id"),
+                                Name = reader.GetString("name"),
+                            };
+                        }
+                    }
+                }
+            }
+            return null; // Return null if no character found
+        }
         public List<Character> GetAllCharacters()
         {
             var characters = new List<Character>();

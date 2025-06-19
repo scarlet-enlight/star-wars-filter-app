@@ -38,15 +38,15 @@
         </StackPanel>
 
         <ListBox Grid.Column="1"
-                 Background="#1B263B" Foreground="#E0E1DD"
-                 BorderThickness="0" Margin="20"
-                 ItemsSource="{Binding FilteredFilms}">
+         Background="#1B263B" Foreground="#E0E1DD"
+         BorderThickness="0" Margin="20"
+         ItemsSource="{Binding Films}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
-                        <TextBlock Text="{Binding Title}" FontWeight="Bold" />
-                        <TextBlock Text="{Binding Music}" />
-                        <TextBlock Text="{Binding Battles}" />
+                        <TextBlock Text="{Binding Id}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Title}" />
+                        <TextBlock Text="{Binding Producer}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
