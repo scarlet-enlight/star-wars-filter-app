@@ -6,16 +6,37 @@
              xmlns:local="clr-namespace:StarWarsFilterApp.View" xmlns:viewmodel="clr-namespace:StarWarsFilterApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:StartViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <StackPanel>
-            <Label Content="Hello! Decide what do you want to know!"/>
+    <Grid Background="#0D1B2A">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" Width="300">
+            <TextBlock Text="Star Wars Wiki"
+                       FontSize="32"
+                       Foreground="#E0E1DD"
+                       FontWeight="Bold"
+                       TextAlignment="Center"
+                       Margin="0,0,0,30"/>
 
             <Button x:Name="btn_characters" Content="Characters" 
-                Background="DarkOrange" Foreground="White"
-                Margin="200 5" Command="{Binding ShowCharactersCommand}"/>
+                Background="#1B263B" 
+                Foreground="#E0E1DD"
+                Padding="10"
+                Margin="0,5" 
+                BorderBrush="#415A77"
+                BorderThickness="1" 
+                Command="{Binding ShowCharactersCommand}"/>
             <Button x:Name="btn_films" Content="Films" 
-                Background="Purple" Foreground="White"
-                Margin="200 5" Command="{Binding ShowFilmsCommand}"/>
+                Background="#1B263B"
+                Foreground="#E0E1DD"
+                Padding="10"
+                Margin="0,5"
+                BorderBrush="#415A77"
+                BorderThickness="1" 
+                Command="{Binding ShowFilmsCommand}"/>
+            <Button x:Name="btn_exit" Content="Exit" 
+                Background="DarkGray"
+                Foreground="White"
+                Padding="10"
+                Margin="0,20,0,0"
+                Command="{Binding ExitCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

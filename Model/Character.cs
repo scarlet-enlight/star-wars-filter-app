@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace StarWarsFilterApp.Model
 {
-    internal class Character
+    public class Character
     {
         public string Name { get; set; }
         public string Species { get; set; }
+        public bool IsFavorite { get; set; }
         public enum GenderType { Female, Male, None }
         public GenderType Gender { get; set; }
         public float Height { get; set; }
