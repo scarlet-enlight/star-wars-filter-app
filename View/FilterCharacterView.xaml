@@ -48,7 +48,7 @@
         <ListBox Grid.Column="1"
                  Background="#1B263B" Foreground="#E0E1DD"
                  BorderThickness="0" Margin="20"
-                 ItemsSource="{Binding FilteredCharacters}">
+                 ItemsSource="{Binding Characters}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">

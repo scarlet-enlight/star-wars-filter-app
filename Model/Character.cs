@@ -8,6 +8,7 @@ namespace StarWarsFilterApp.Model
 {
     public class Character
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Species { get; set; }
         public bool IsFavorite { get; set; }
@@ -22,7 +23,7 @@ namespace StarWarsFilterApp.Model
         public string Eye_color { get; set; }
         public string Hair_color { get; set; }
 
-        Character()
+        public Character()
         {
             Name = "";
             Species = "";
