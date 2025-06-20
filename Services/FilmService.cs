@@ -61,9 +61,9 @@ namespace StarWarsFilterApp.Services
                                "AND (release_date = @release_date OR @release_date IS NULL)";
                 using (var cmd = new MySqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@title", string.IsNullOrWhiteSpace(title) ? DBNull.Value : title);
-                    cmd.Parameters.AddWithValue("@producer", string.IsNullOrWhiteSpace(producer) ? DBNull.Value : producer);
-                    cmd.Parameters.AddWithValue("@director", string.IsNullOrWhiteSpace(director) ? DBNull.Value : director);
+                    cmd.Parameters.AddWithValue("@title", string.IsNullOrWhiteSpace(title) ? DBNull.Value : $"%{title}%");
+                    cmd.Parameters.AddWithValue("@producer", string.IsNullOrWhiteSpace(producer) ? DBNull.Value : $"%{producer}%");
+                    cmd.Parameters.AddWithValue("@director", string.IsNullOrWhiteSpace(director) ? DBNull.Value : $"%{director}%");
                     cmd.Parameters.AddWithValue("@release_date", string.IsNullOrWhiteSpace(release_date) ? DBNull.Value : DateTime.Parse(release_date));
                     using (var reader = cmd.ExecuteReader())
                     {
