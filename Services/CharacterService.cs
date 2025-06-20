@@ -22,56 +22,7 @@ namespace StarWarsFilterApp.Services
             _connectionService = new MySQLConnectionService();
         }
 
-        // Metoda dla wyszukiwania postaci po imieniu
-        public Character GetCharacterByName(string name)
-        {
-            using (var conn = _connectionService.GetConnection())
-            {
-                string query =
-                    "SELECT " +
-                    "  c.name AS character_name, " +
-                    "  s.name AS species_name, " +
-                    "  p.name AS character_homeworld, " +
-                    "  c.gender, " +
-                    "  c.height, " +
-                    "  (SELECT GROUP_CONCAT(DISTINCT o.name) " +
-                    "   FROM character_organization co " +
-                    "   JOIN organizations o ON co.organization_id = o.id " +
-                    "   WHERE co.character_id = c.id) AS organization, " +
-                    "  (SELECT GROUP_CONCAT(DISTINCT f.title) " +
-                    "   FROM character_film cf " +
-                    "   JOIN films f ON cf.film_id = f.id " +
-                    "   WHERE cf.character_id = c.id) AS film_title " +
-                    "FROM characters c " +
-                    "JOIN species s ON c.species_id = s.id " +
-                    "LEFT JOIN planets p ON c.homeworld_id = p.id " +
-                    "WHERE c.name LIKE @name";
-
-
-                using (var cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@name", $"%{name}%");
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return new Character
-                            {
-                                Name = reader.IsDBNull(reader.GetOrdinal("character_name")) ? null : reader.GetString("character_name"),
-                                Species = reader.IsDBNull(reader.GetOrdinal("species_name")) ? null : reader.GetString("species_name"),
-                                Planet = reader.IsDBNull(reader.GetOrdinal("character_homeworld")) ? null : reader.GetString("character_homeworld"),
-                                Organization = reader.IsDBNull(reader.GetOrdinal("organization")) ? null : reader.GetString("organization"),
-                                Gender = reader.IsDBNull(reader.GetOrdinal("gender")) ? Character.GenderType.None : Enum.TryParse<Character.GenderType>(reader.GetString("gender"), out var parsedGender) ? parsedGender : Character.GenderType.None,
-                                Height = reader.IsDBNull(reader.GetOrdinal("height")) ? 0f : reader.GetFloat("height"),
-                                Film = reader.IsDBNull(reader.GetOrdinal("film_title")) ? null : reader.GetString("film_title"),
-                            };
-                        }
-                    }
-                }
-            }
-            return null; // Zwróć null, jeśli nie znaleziono postaci
-        }
+        
 
 
         // Metoda dla pobierania wszystkich postaci
@@ -128,7 +79,7 @@ namespace StarWarsFilterApp.Services
         }
 
         // Metoda dla filtrowania postaci na podstawie filtrów
-        public List<Character> GetFilteredCharacters(string species, string planet, string organization, string film,
+        public List<Character> GetFilteredCharacters(string name, string species, string planet, string organization, string film,
             string gender, string height)
         {
             float parsedHeight = 0f;
@@ -168,10 +119,11 @@ namespace StarWarsFilterApp.Services
                     "FROM characters c " +
                     "JOIN species s ON c.species_id = s.id " +
                     "LEFT JOIN planets p ON c.homeworld_id = p.id " +
-                    "WHERE (@species IS NULL OR s.name = @species) " +
+                    "WHERE (@name IS NULL OR c.name LIKE @name) " +
+                    "  AND (@species IS NULL OR s.name LIKE @species) " +
                     "  AND (@gender IS NULL OR c.gender = @gender) " +
                     "  AND (@height = 0 OR ABS(c.height - @height) < 0.001) " +
-                    "  AND (@planet IS NULL OR p.name = @planet) " +
+                    "  AND (@planet IS NULL OR p.name LIKE @planet) " +
                     "  AND ( " +
                     "      @organization IS NULL " +
                     "      OR EXISTS ( " +
@@ -192,10 +144,11 @@ namespace StarWarsFilterApp.Services
 
                 using (var cmd = new MySqlCommand(query, conn))
                 {
+                    cmd.Parameters.AddWithValue("@name", string.IsNullOrWhiteSpace(name) ? DBNull.Value : $"%{name}%"); 
                     cmd.Parameters.AddWithValue("@gender", string.IsNullOrWhiteSpace(gender) ? DBNull.Value : gender);
-                    cmd.Parameters.AddWithValue("@species", string.IsNullOrWhiteSpace(species) ? DBNull.Value : species);
+                    cmd.Parameters.AddWithValue("@species", string.IsNullOrWhiteSpace(species) ? DBNull.Value : $"%{species}%");
                     cmd.Parameters.AddWithValue("@height", parsedHeight);
-                    cmd.Parameters.AddWithValue("@planet", string.IsNullOrWhiteSpace(planet) ? DBNull.Value : planet);
+                    cmd.Parameters.AddWithValue("@planet", string.IsNullOrWhiteSpace(planet) ? DBNull.Value : $"%{planet}%");
                     cmd.Parameters.AddWithValue("@organization", string.IsNullOrWhiteSpace(organization) ? DBNull.Value : $"%{organization}%");
                     cmd.Parameters.AddWithValue("@film", string.IsNullOrWhiteSpace(film) ? DBNull.Value : $"%{film}%");
 
