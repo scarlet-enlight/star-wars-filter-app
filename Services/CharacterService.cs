@@ -22,110 +22,64 @@ namespace StarWarsFilterApp.Services
             _connectionService = new MySQLConnectionService();
         }
 
-
+        // Metoda dla wyszukiwania postaci po imieniu
         public Character GetCharacterByName(string name)
         {
             using (var conn = _connectionService.GetConnection())
             {
-                string query = "SELECT id, name FROM characters WHERE name = @name";
+                string query = "SELECT c.name AS character_name, s.name AS species_name, gender, height " +
+                    "FROM characters AS c " +
+                    "INNER JOIN species AS s ON c.species_id = s.id " +
+                    "WHERE c.name LIKE @name";
+
                 using (var cmd = new MySqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@name", $"%{name}%");
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             return new Character
                             {
-                                Id = reader.GetInt32("id"),
-                                Name = reader.GetString("name"),
+                                Name = reader.GetString("character_name"),
+                                Species = reader.GetString("species_name"),
+                                Gender = Enum.TryParse<Character.GenderType>(
+                                     reader.GetString("gender"),
+                                     out var gender) ? gender : Character.GenderType.None,
+                                Height = reader.GetFloat("height")
                             };
                         }
                     }
                 }
             }
-            return null; // Return null if no character found
+            return null; // Zwróć null, jeśli nie znaleziono postaci
         }
+
+        // Metoda dla pobierania wszystkich postaci
         public List<Character> GetAllCharacters()
         {
             var characters = new List<Character>();
             using (var conn = _connectionService.GetConnection())
             {
-                string query = "SELECT name, gender, height  FROM characters";
-                using (var cmd = new MySqlCommand(query, conn))
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        characters.Add(new Character
-                        {
-                            Name = reader.GetString("name"),
-                            Gender = Enum.TryParse<Character.GenderType>(
-                                 reader.GetString("gender"),
-                                 out var gender) ? gender : Character.GenderType.None,
-                            Height = reader.GetFloat("height")
-                        });
-                    }
-                }
-            }
-            return characters;
-        }
+                string query = "SELECT c.name AS character_name, s.name AS species_name, gender, height " +
+                    "FROM characters AS c " +
+                    "INNER JOIN species AS s ON c.species_id = s.id";
 
-        public List<Character> GetCharactersBySpecies(string species)
-        {
-            var characters = new List<Character>();
-            using (var conn = _connectionService.GetConnection())
-            {
-                string query = "SELECT id, name, species FROM characters WHERE species = @species";
                 using (var cmd = new MySqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@species", species);
-
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             characters.Add(new Character
                             {
-                                Id = reader.GetInt32("id"),
-                                Name = reader.GetString("name"),
-                                Species = reader.GetString("species")
-                            });
-                        }
-                    }
-                }
-            }
-            return characters;
-        }
-
-        public List<Character> GetFilteredCharacters(string gender, string Height)
-        {
-            float height = 0f;
-            if (!string.IsNullOrWhiteSpace(Height))
-            {
-                float.TryParse(Height, NumberStyles.Any, CultureInfo.CurrentCulture, out height);
-            }
-
-            var characters = new List<Character>();
-            using (var conn = _connectionService.GetConnection())
-            {
-
-                string query = "SELECT name, gender, height FROM characters WHERE gender=@gender OR (height BETWEEN @height - 0.01 AND @height + 0.01)";
-                using (var cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@gender", gender);
-                    cmd.Parameters.AddWithValue("@height", height);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            characters.Add(new Character
-                            {
-                                Gender = Enum.TryParse<Character.GenderType>(reader.GetString("gender"), out var parsedGender)
-                            ? parsedGender
-                            : Character.GenderType.None,
+                                Name = reader.GetString("character_name"),
+                                Species = reader.GetString("species_name"),
+                                Gender = Enum.TryParse<Character.GenderType>(
+                                     reader.GetString("gender"),
+                                     out var gender) ? gender : Character.GenderType.None,
                                 Height = reader.GetFloat("height")
-
                             });
                         }
                     }
@@ -133,5 +87,85 @@ namespace StarWarsFilterApp.Services
                 return characters;
             }
         }
+
+        // Metoda dla filtrowania postaci na podstawie filtrów
+        public List<Character> GetFilteredCharacters(string species, string planet, string organization, string film,
+            string gender, string height)
+        {
+            float parsedHeight = 0f;
+            if (!string.IsNullOrWhiteSpace(height))
+            {
+                float.TryParse(height, NumberStyles.Any, CultureInfo.CurrentCulture, out parsedHeight);
+            }
+            else
+            {
+                parsedHeight = 0f; // Domyślny wzrost, jeśli nie podano
+            }
+
+            var characters = new List<Character>();
+
+            using (var conn = _connectionService.GetConnection())
+            {
+                // Zapytanie SQL z parametrami dla płci i wzrostu
+                string query = "SELECT c.name AS character_name, s.name AS species_name, gender, height " +
+                    "FROM characters AS c " +
+                    "INNER JOIN species AS s " +
+                    "ON c.species_id = s.id " +
+                    "WHERE (@species IS NULL OR s.name = @species) " +
+                    "AND (@gender IS NULL OR gender = @gender) " +
+                    "AND (@height = 0 OR ABS(height - @height) < 0.001) ";
+                    
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@gender", string.IsNullOrWhiteSpace(gender) ? DBNull.Value : gender);
+                    cmd.Parameters.AddWithValue("@species", string.IsNullOrWhiteSpace(species) ? DBNull.Value : species);
+                    cmd.Parameters.AddWithValue("@height", parsedHeight);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            characters.Add(new Character
+                            {
+                                Name = reader.GetString("character_name"),
+                                Species = reader.GetString("species_name"),
+                                Gender = Enum.TryParse<Character.GenderType>(reader.GetString("gender"), out var parsedGender)
+                                    ? parsedGender
+                                    : Character.GenderType.None,
+                                Height = reader.GetFloat("height")
+                            });
+                        }
+                    }
+                }
+                return characters;
+            }
+        }
+
+        //public List<Character> GetCharactersBySpecies(string species)
+        //{
+        //    var characters = new List<Character>();
+        //    using (var conn = _connectionService.GetConnection())
+        //    {
+        //        string query = "SELECT id, name, species FROM characters WHERE species = @species";
+        //        using (var cmd = new MySqlCommand(query, conn))
+        //        {
+        //            cmd.Parameters.AddWithValue("@species", species);
+
+        //            using (var reader = cmd.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    characters.Add(new Character
+        //                    {
+        //                        Id = reader.GetInt32("id"),
+        //                        Name = reader.GetString("name"),
+        //                        Species = reader.GetString("species")
+        //                    });
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return characters;
+        // }
     }
 }
