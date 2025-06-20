@@ -11,7 +11,7 @@ namespace StarWarsFilterApp.Model
         public int Id { get; set; }
         public string Director { get; set; }
         public string Title { get; set; }
-        public DateOnly Release_date { get; set; }
+        public string Release_date { get; set; }
         public string Producer { get; set; }
         public string Opening_crawl { get; set; }
 
@@ -19,7 +19,7 @@ namespace StarWarsFilterApp.Model
         {
             Director = "";
             Title = "";
-            Release_date = DateOnly.Parse("1900-01-01");
+            Release_date = "";
             Producer = "";
             Opening_crawl = "";
         }
