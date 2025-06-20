@@ -11,6 +11,9 @@ namespace StarWarsFilterApp.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public string Species { get; set; }
+        public string Planet { get; set; }
+        public string Organization { get; set; }
+        public string Film { get; set; }
         public bool IsFavorite { get; set; }
         public enum GenderType { None, Male, Female}
         public GenderType Gender { get; set; }

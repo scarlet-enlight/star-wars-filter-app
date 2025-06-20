@@ -10,7 +10,7 @@ namespace StarWarsFilterApp.Services
 {
     public class MySQLConnectionService
     {
-        private readonly string _connStr = "server=127.0.0.1;user=root;database=star_wars;port=3306;password=";
+        private readonly string _connStr = "server=127.0.0.1;user=root;database=star_wars;port=3306;password=root";
 
         public MySqlConnection GetConnection()
         {
