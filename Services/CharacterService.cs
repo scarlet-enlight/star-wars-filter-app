@@ -158,14 +158,12 @@ namespace StarWarsFilterApp.Services
                     "    FROM character_organization co2 " +
                     "    JOIN organizations o2 ON co2.organization_id = o2.id " +
                     "    WHERE co2.character_id = c.id " +
-                    "    AND (@organization IS NULL OR o2.name = @organization) " +
                     "  ) AS organization, " +
                     "  ( " +
                     "    SELECT GROUP_CONCAT(DISTINCT f2.title) " +
                     "    FROM character_film cf2 " +
                     "    JOIN films f2 ON cf2.film_id = f2.id " +
                     "    WHERE cf2.character_id = c.id " +
-                    "    AND (@film IS NULL OR f2.title = @film) " +
                     "  ) AS film_title " +
                     "FROM characters c " +
                     "JOIN species s ON c.species_id = s.id " +
