@@ -24,48 +24,48 @@ namespace StarWarsFilterApp.ViewModel
 
         // Powiązane właściwości
         private string _name;
-        public string Name
+        public string? Name
         {
             get => _name;
             set => SetProperty(ref _name, value);
         }
 
         private string _species;
-        public string Species
+        public string? Species
         {
             get => _species;
             set => SetProperty(ref _species, value);
         }
 
         private string _planet;
-        public string Planet
+        public string? Planet
         {
             get => _planet;
             set => SetProperty(ref _planet, value);
         }
 
         private string _organization;
-        public string Organization
+        public string? Organization
         {
             get => _organization;
             set => SetProperty(ref _organization, value);
         }
 
         private string _film;
-        public string Film
+        public string? Film
         {
             get => _film;
             set => SetProperty(ref _film, value);
         }
         private string _height;
-        public string Height
+        public string? Height
         {
             get => _height;
             set => SetProperty(ref _height, value);
         }
 
         private string _gender;
-        public string Gender
+        public string? Gender
         {
             get => _gender;
             set => SetProperty(ref _gender, value);
@@ -114,11 +114,13 @@ namespace StarWarsFilterApp.ViewModel
             else
             {
                 // Jeśli nie podano imienia, pobierz wszystkie postacie lub zastosuj filtry
-                result = _characterService.GetFilteredCharacters(species, planet, organization, film, height, gender);
+                result = _characterService.GetFilteredCharacters(species, planet, organization, film, gender, height);
             }
 
             Characters = new ObservableCollection<Character>(result);
             OnPropertyChanged(nameof(Characters));
+
+            ClearTextFields(null);
 
             return Characters.ToList();
         }
@@ -133,11 +135,13 @@ namespace StarWarsFilterApp.ViewModel
         // Czyści pola tekstowe
         private void ClearTextFields(object? obj)
         {
-            Name = string.Empty;
-            Species = string.Empty;
-            Planet = string.Empty;
-            Organization = string.Empty;
-            Film = string.Empty;
+            Name = null;
+            Species = null;
+            Planet = null;
+            Organization = null;
+            Film = null;
+            Gender = null;
+            Height = null;
         }
     }
 }
