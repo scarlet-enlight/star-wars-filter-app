@@ -2,7 +2,6 @@
 using StarWarsFilterApp.Services;
 using StarWarsFilterApp.View;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Windows.Input;
 
 namespace StarWarsFilterApp.ViewModel
@@ -12,10 +11,9 @@ namespace StarWarsFilterApp.ViewModel
         // Referencja do głównego widoku
         private readonly MainWindowViewModel _main;
 
-        // Komendy do nawigacji
+        // Komendy do nawigacji i operacji
         public ICommand ReturnCommand { get; }
         public ICommand ClearTextFieldsCommand { get; }
-
         public ICommand FilterCommand { get; }
 
         // Serwis do pobierania postaci
@@ -23,74 +21,6 @@ namespace StarWarsFilterApp.ViewModel
 
         // Kolekcja postaci
         public ObservableCollection<Character> Characters { get; set; }
-
-
-
-        public FilterCharacterViewModel(MainWindowViewModel main)
-        {
-            _main = main;
-            ReturnCommand = new RelayCommand(ReturnToStart);
-            ClearTextFieldsCommand = new RelayCommand(ClearTextFields);
-            FilterCommand = new RelayCommand(obj => FilterCharacters(Name, Species, Planet, Organization, Film, Height, Gender));
-
-
-            // Inicjalizacja kolekcji postaci
-            _characterService = new CharacterService();
-
-            LoadCharacters();
-        }
-
-        public List<Character> FilterCharacters(string name, string species, string planet, string organization, string film, string height, string gender)
-        {
-            _name = name;
-            _species = species;
-            _planet = planet;
-            _organization = organization;
-            _film = film;
-            _height = height;
-            _gender = gender;
-
-            IEnumerable<Character> result;
-
-            if (_name != null)
-            {
-
-                result = new List<Character> { _characterService.GetCharacterByName(_name) };
-
-            }
-            else
-            {
-                result = _characterService.GetFilteredCharacters(_gender, _height);
-            }
-
-            Characters = new ObservableCollection<Character>(result);
-            OnPropertyChanged(nameof(Characters));
-
-            return Characters.ToList();
-        }
-
-
-        private void ReturnToStart(object? obj)
-        {
-            _main.CurrentView = new StartView(_main);
-        }
-
-        private void ClearTextFields(object? obj)
-        {
-            Name = string.Empty;
-            Species = string.Empty;
-            Planet = string.Empty;
-            Organization = string.Empty;
-            Film = string.Empty;
-        }
-        private void LoadCharacters()
-        {
-
-            var result = _characterService.GetAllCharacters();
-            Characters = new ObservableCollection<Character>(result);
-            OnPropertyChanged(nameof(Characters));
-        }
-
 
         // Powiązane właściwości
         private string _name;
@@ -135,10 +65,79 @@ namespace StarWarsFilterApp.ViewModel
         }
 
         private string _gender;
-        public  string Gender
+        public string Gender
         {
             get => _gender;
             set => SetProperty(ref _gender, value);
+        }
+
+        public FilterCharacterViewModel(MainWindowViewModel main)
+        {
+            _main = main;
+            ReturnCommand = new RelayCommand(ReturnToStart);
+            ClearTextFieldsCommand = new RelayCommand(ClearTextFields);
+            FilterCommand = new RelayCommand(obj => FilterCharacters(Name, Species, Planet, Organization, Film, Height, Gender));
+
+
+            // Inicjalizacja kolekcji postaci
+            _characterService = new CharacterService();
+
+            LoadCharacters();
+        }
+
+        // Ładuje wszystkie postacie z bazy danych
+        private void LoadCharacters()
+        {
+            var result = _characterService.GetAllCharacters();
+            Characters = new ObservableCollection<Character>(result);
+            OnPropertyChanged(nameof(Characters));
+        }
+
+        /// Filtruje postacie na podstawie podanych kryteriów.
+        public List<Character> FilterCharacters(string name, string species, string planet, string organization, string film, string height, string gender)
+        {
+            _name = name;
+            _species = species;
+            _planet = planet;
+            _organization = organization;
+            _film = film;
+            _height = height;
+            _gender = gender;
+
+            IEnumerable<Character> result;
+
+            if (_name != null)
+            {
+                // Jeśli podano imię, pobierz postać o tym imieniu
+                result = new List<Character> { _characterService.GetCharacterByName(_name) };
+            }
+            else
+            {
+                // Jeśli nie podano imienia, pobierz wszystkie postacie lub zastosuj filtry
+                result = _characterService.GetFilteredCharacters(species, planet, organization, film, height, gender);
+            }
+
+            Characters = new ObservableCollection<Character>(result);
+            OnPropertyChanged(nameof(Characters));
+
+            return Characters.ToList();
+        }
+
+
+        // Nawigacja do widoku StartView
+        private void ReturnToStart(object? obj)
+        {
+            _main.CurrentView = new StartView(_main);
+        }
+
+        // Czyści pola tekstowe
+        private void ClearTextFields(object? obj)
+        {
+            Name = string.Empty;
+            Species = string.Empty;
+            Planet = string.Empty;
+            Organization = string.Empty;
+            Film = string.Empty;
         }
     }
 }
