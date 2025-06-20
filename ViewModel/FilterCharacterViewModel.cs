@@ -104,19 +104,8 @@ namespace StarWarsFilterApp.ViewModel
             _height = height;
             _gender = gender;
 
-            IEnumerable<Character> result;
-
-            if (_name != null)
-            {
-                // Jeśli podano imię, pobierz postać o tym imieniu
-                result = new List<Character> { _characterService.GetCharacterByName(_name) };
-            }
-            else
-            {
-                // Jeśli nie podano imienia, pobierz wszystkie postacie lub zastosuj filtry
-                result = _characterService.GetFilteredCharacters(species, planet, organization, film, gender, height);
-            }
-
+            var result = _characterService.GetFilteredCharacters(name, species, planet, organization, film, gender, height);
+            
             Characters = new ObservableCollection<Character>(result);
             OnPropertyChanged(nameof(Characters));
 
