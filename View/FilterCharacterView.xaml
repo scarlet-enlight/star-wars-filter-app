@@ -61,6 +61,10 @@
                 <DataTemplate>
                     <StackPanel Margin="5">
                         <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Species}" />
+                        <TextBlock Text="{Binding Planet}" />
+                        <TextBlock Text="{Binding Organization}" />
+                        <TextBlock Text="{Binding Film}" />
                         <TextBlock Text="{Binding Height}" />
                         <TextBlock Text="{Binding Gender}" />
                     </StackPanel>
