@@ -34,8 +34,12 @@
                      ToolTip="e.g. A New Hope" />
 
             <Label Content="Gender:" Foreground="#E0E1DD"/>
-            <TextBox Text="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" 
-                 />
+            <ComboBox Text="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Tag">
+                <ComboBoxItem Content="-" Tag="{x:Null}" />
+                <ComboBoxItem Content="None" Tag="None"/>
+                <ComboBoxItem Content="Male" Tag="Male"/>
+                <ComboBoxItem Content="Female" Tag="Female"/>
+            </ComboBox>
 
             <Label Content="Height:" Foreground="#E0E1DD"/>
             <TextBox Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" 
