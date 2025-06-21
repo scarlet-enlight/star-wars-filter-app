@@ -96,6 +96,8 @@ namespace StarWarsFilterApp.ViewModel
         /// Filtruje postacie na podstawie podanych kryteriów.
         public List<Character> FilterCharacters(string name, string species, string planet, string organization, string film, string height, string gender)
         {
+            if (gender == "-") gender = null;
+
             _name = name;
             _species = species;
             _planet = planet;
