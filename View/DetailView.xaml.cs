@@ -1,4 +1,6 @@
-﻿using System;
+﻿using StarWarsFilterApp.Model;
+using StarWarsFilterApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,10 @@ namespace StarWarsFilterApp.View
     /// </summary>
     public partial class DetailView : UserControl
     {
-        public DetailView()
+        public DetailView(MainWindowViewModel main, Character ch)
         {
             InitializeComponent();
+            DataContext = new DetailViewModel(main, ch);
         }
     }
 }

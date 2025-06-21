@@ -1,6 +1,7 @@
 ﻿using StarWarsFilterApp.Model;
 using StarWarsFilterApp.Services;
 using StarWarsFilterApp.View;
+using StarWarsFilterApp.ViewModel;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -15,6 +16,8 @@ namespace StarWarsFilterApp.ViewModel
         public ICommand ReturnCommand { get; }
         public ICommand ClearTextFieldsCommand { get; }
         public ICommand FilterCommand { get; }
+        public ICommand ShowDetailCommand { get; }
+
 
         // Serwis do pobierania postaci
         private readonly CharacterService _characterService;
@@ -77,7 +80,7 @@ namespace StarWarsFilterApp.ViewModel
             ReturnCommand = new RelayCommand(ReturnToStart);
             ClearTextFieldsCommand = new RelayCommand(ClearTextFields);
             FilterCommand = new RelayCommand(obj => FilterCharacters(Name, Species, Planet, Organization, Film, Height, Gender));
-
+            ShowDetailCommand = new RelayCommand(ShowDetail);
 
             // Inicjalizacja kolekcji postaci
             _characterService = new CharacterService();
@@ -133,6 +136,14 @@ namespace StarWarsFilterApp.ViewModel
             Film = null;
             Gender = null;
             Height = null;
+        }
+
+        private void ShowDetail(object? parameter)
+        {
+            if (parameter is Character ch)
+            {
+                _main.CurrentView = new DetailView(_main, ch);
+            }
         }
     }
 }

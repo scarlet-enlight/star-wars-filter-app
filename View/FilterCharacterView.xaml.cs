@@ -1,4 +1,5 @@
-﻿using StarWarsFilterApp.ViewModel;
+﻿using StarWarsFilterApp.Model;
+using StarWarsFilterApp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,12 @@ namespace StarWarsFilterApp.View
         private void Lb_characters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListBoxItem item && item.DataContext is Character ch)
+                (DataContext as FilterCharacterViewModel)?.ShowDetailCommand.Execute(ch);
         }
     }
 }

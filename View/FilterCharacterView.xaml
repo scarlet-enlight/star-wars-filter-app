@@ -61,6 +61,12 @@
                  Background="#1B263B" Foreground="#E0E1DD"
                  BorderThickness="0" Margin="20"
                  ItemsSource="{Binding Characters}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="MouseDoubleClick"
+                 Handler="ListBoxItem_MouseDoubleClick"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
