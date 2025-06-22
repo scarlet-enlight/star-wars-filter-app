@@ -49,7 +49,14 @@ namespace StarWarsFilterApp.Services
                         "    WHERE co.character_id = c.id " +
                         "  ) AS organization, " +
                         "  c.gender, " +
-                        "  c.height " +
+                        "  c.height, " +
+                        "  c.weight, " +
+                        "  c.description, " +
+                        "  c.hair_color, " +
+                        "  c.eye_color, " +
+                        "  c.skin_color, " +
+                        "  c.year_born, " +
+                        "  c.year_died " +
                         "FROM characters c " +
                         "JOIN species s ON c.species_id = s.id " +
                         "LEFT JOIN planets p ON c.homeworld_id = p.id";
@@ -69,6 +76,13 @@ namespace StarWarsFilterApp.Services
                                 Organization = reader.IsDBNull(reader.GetOrdinal("organization")) ? null : reader.GetString("organization"),
                                 Gender = reader.IsDBNull(reader.GetOrdinal("gender")) ? Character.GenderType.None : Enum.TryParse<Character.GenderType>(reader.GetString("gender"), out var parsedGender) ? parsedGender : Character.GenderType.None,
                                 Height = reader.IsDBNull(reader.GetOrdinal("height")) ? 0f : reader.GetFloat("height"),
+                                Weight = reader.IsDBNull(reader.GetOrdinal("weight")) ? 0f : reader.GetFloat("weight"),
+                                Description = reader.IsDBNull(reader.GetOrdinal("description")) ? null : reader.GetString("description"),
+                                Hair_color = reader.IsDBNull(reader.GetOrdinal("hair_color")) ? null : reader.GetString("hair_color"),
+                                Eye_color = reader.IsDBNull(reader.GetOrdinal("eye_color")) ? null : reader.GetString("eye_color"),
+                                Skin_color = reader.IsDBNull(reader.GetOrdinal("skin_color")) ? null : reader.GetString("skin_color"),
+                                Year_born = reader.IsDBNull(reader.GetOrdinal("year_born")) ? 0 : reader.GetInt32("year_born"),
+                                Year_died = reader.IsDBNull(reader.GetOrdinal("year_died")) ? 0 : reader.GetInt32("year_died"),
                                 Film = reader.IsDBNull(reader.GetOrdinal("film_title")) ? null : reader.GetString("film_title"),
                             });
                         }
@@ -104,6 +118,13 @@ namespace StarWarsFilterApp.Services
                     "  p.name AS character_homeworld, " +
                     "  c.gender, " +
                     "  c.height, " +
+                    "  c.weight, " +
+                    "  c.description, " +
+                    "  c.hair_color, " +
+                    "  c.eye_color, " +
+                    "  c.skin_color, " +
+                    "  c.year_born, " +
+                    "  c.year_died, " +
                     "  ( " +
                     "    SELECT GROUP_CONCAT(DISTINCT o2.name) " +
                     "    FROM character_organization co2 " +
@@ -165,8 +186,14 @@ namespace StarWarsFilterApp.Services
                                 Organization = reader.IsDBNull(reader.GetOrdinal("organization")) ? null : reader.GetString("organization"),
                                 Gender = reader.IsDBNull(reader.GetOrdinal("gender")) ? Character.GenderType.None : Enum.TryParse<Character.GenderType>(reader.GetString("gender"), out var parsedGender) ? parsedGender : Character.GenderType.None,
                                 Height = reader.IsDBNull(reader.GetOrdinal("height")) ? 0f : reader.GetFloat("height"),
+                                Weight = reader.IsDBNull(reader.GetOrdinal("weight")) ? 0f : reader.GetFloat("weight"),
+                                Description = reader.IsDBNull(reader.GetOrdinal("description")) ? null : reader.GetString("description"),
+                                Hair_color = reader.IsDBNull(reader.GetOrdinal("hair_color")) ? null : reader.GetString("hair_color"),
+                                Eye_color = reader.IsDBNull(reader.GetOrdinal("eye_color")) ? null : reader.GetString("eye_color"),
+                                Skin_color = reader.IsDBNull(reader.GetOrdinal("skin_color")) ? null : reader.GetString("skin_color"),
+                                Year_born = reader.IsDBNull(reader.GetOrdinal("year_born")) ? 0 : reader.GetInt32("year_born"),
+                                Year_died = reader.IsDBNull(reader.GetOrdinal("year_died")) ? 0 : reader.GetInt32("year_died"),
                                 Film = reader.IsDBNull(reader.GetOrdinal("film_title")) ? null : reader.GetString("film_title"),
-
                             });
                         }
                     }
