@@ -6,7 +6,81 @@
              xmlns:local="clr-namespace:StarWarsFilterApp.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="#0D1B2A">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="1" Margin="20">
+            <Label Content="Name:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+             ToolTip="e.g. Luke Skywalker" IsReadOnly="True"/>
+
+            <Label Content="Species:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Species, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+             ToolTip="e.g. Human" IsReadOnly="True"/>
+
+            <Label Content="Planet:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Planet, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+             ToolTip="e.g. Tatooine" IsReadOnly="True"/>
+
+            <Label Content="Organization:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Organization, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+             ToolTip="e.g. Jedi Order" IsReadOnly="True"/>
+
+            <Label Content="Film:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Film, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+             ToolTip="e.g. A New Hope" IsReadOnly="True"/>
+
+            <Label Content="Gender:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Gender, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+             ToolTip="e.g. Male" IsReadOnly="True"/>
+
+            <Label Content="Description:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                     IsReadOnly="True"/>
+        </StackPanel>
+        <StackPanel Grid.Column="3">
+
+            <Label Content="Height:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Height, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                     IsReadOnly="True"/>
+
+            <Label Content="Weight:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding Weight, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsReadOnly="True"/>
+
+            <Label Content="Hair color:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding HairColor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                     IsReadOnly="True"/>
+
+            <Label Content="Eye color:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding EyeColor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                     IsReadOnly="True"/>
+
+            <Label Content="Skin color:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding SkinColor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                     IsReadOnly="True"/>
+
+            <Label Content="Year born:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding YearBorn, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                     IsReadOnly="True"/>
             
+            <Label Content="Year died:" Foreground="#E0E1DD"/>
+            <TextBox Text="{Binding YearDied, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsReadOnly="True"/>
+            
+        </StackPanel>
+        <Button Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Content="Back"
+    Background="DarkGray" Foreground="White"
+    Margin="20 20" Padding="8"
+    Command="{Binding BackCommand}" />
     </Grid>
 </UserControl>
