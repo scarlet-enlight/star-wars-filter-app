@@ -47,7 +47,7 @@
             <TextBox Text="{Binding Description, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                      IsReadOnly="True"/>
         </StackPanel>
-        <StackPanel Grid.Column="3">
+        <StackPanel Grid.Column="3" Margin="20">
 
             <Label Content="Height:" Foreground="#E0E1DD"/>
             <TextBox Text="{Binding Height, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
