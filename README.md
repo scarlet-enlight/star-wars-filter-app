@@ -32,7 +32,6 @@ Adjust fields as needed to match the app's model.
 
 ## Configuration
 The app needs a MySQL connection string. Add or update it in your configuration (for example, App.config or an appropriate settings file used by the project). Example connection string for MySQL:
-
 ```
 Server=localhost;Port=3306;Database=starwars;Uid=root;Pwd=your_password;
 ```
@@ -51,14 +50,14 @@ If the project is SDK-style: dotnet build dotnet run --project path/to/YourApp.c
 Otherwise, open and run in Visual Studio.
 
 ## Contributing
-Fork the repository and open a PR for changes.
-Keep UI and data access changes separate where possible (MVVM pattern).
-Add tests where applicable and document any DB schema changes.
-Troubleshooting
-Connection errors: verify MySQL server is running and the connection string credentials/port are correct.
-Missing MySQL provider: install MySql.Data via NuGet.
-If the app expects a different table/schema, inspect the model/data-access code and update the DB accordingly.
-License
+- Fork the repository and open a PR for changes.
+- Keep UI and data access changes separate where possible (MVVM pattern).
+- Add tests where applicable and document any DB schema changes.
+## Troubleshooting
+- Connection errors: verify MySQL server is running and the connection string credentials/port are correct.
+- Missing MySQL provider: install MySql.Data via NuGet.
+- If the app expects a different table/schema, inspect the model/data-access code and update the DB accordingly.
+## License
 MIT License — see LICENSE file for full text.
 
 Copyright (c) 2025 scarlet-enlight
